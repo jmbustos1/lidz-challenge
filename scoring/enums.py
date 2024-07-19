@@ -9,3 +9,13 @@ class ModelMessage(_TextChoices):
 
     Client = "client"
     Agent = "agent"
+
+class BankChoices(_TextChoices):
+    BANCO_ITAU = "Banco Itau"
+    BANCO_BICE = "Banco Bice"
+    BANCO_ESTADO = "Banco Estado"
+    BANCO_CHILE = "Banco Chile"
+    BANCO_SANTANDER = "Banco Santander"
+    BANCO_BCI = "Banco BCI"
+    BANCO_FALABELLA = "Banco Falabella"
+    HITES = "Hites"

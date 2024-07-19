@@ -1,6 +1,7 @@
 from django.db import models
 from scoring.enums import (
     ModelMessage,
+    BankChoices,
 )
 
 class Client(models.Model):
@@ -26,3 +27,13 @@ class Message(models.Model):
 
     def __str__(self):
         return f"{self.role} - {self.sent_at}: {self.text[:20]}"
+    
+
+class Debt(models.Model):
+    client = models.ForeignKey(Client, related_name='debts', on_delete=models.CASCADE)
+    institution = models.CharField(max_length=100, choices=BankChoices.choices)
+    amount = models.IntegerField()
+    due_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.institution} - {self.amount} - {self.due_date}"
