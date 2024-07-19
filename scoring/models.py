@@ -1,4 +1,7 @@
 from django.db import models
+from scoring.enums import (
+    ModelMessage,
+)
 
 class Client(models.Model):
     name = models.CharField(max_length=100)
@@ -12,3 +15,14 @@ class Client(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Message(models.Model):
+    
+    client = models.ForeignKey(Client, related_name='messages', on_delete=models.CASCADE)
+    text = models.TextField()
+    role = models.CharField(max_length=10, choices=ModelMessage.choices)
+    sent_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.role} - {self.sent_at}: {self.text[:20]}"
