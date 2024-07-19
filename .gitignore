@@ -1,0 +1,12 @@
+
+# Python
+scoring/__pycache__/
+
+# Python
+LidzTest/__pycache__/
+
+# db
+db.sqlite3
+
+# Environments
+.env

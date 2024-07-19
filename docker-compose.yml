@@ -1,0 +1,28 @@
+version: '3.8'
+x-base: &base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: lidz-image
+  env_file: .env
+
+services:
+  postgres:
+    image: postgres:15.5-alpine3.19
+    container_name: lidz-postgres
+    restart: unless-stopped
+    env_file: .env
+
+  django:
+    <<: *base
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    container_name: lidz-django
+    volumes:
+      - .:/LidzTest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
