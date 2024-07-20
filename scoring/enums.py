@@ -7,8 +7,8 @@ class ModelMessage(_TextChoices):
     Alternativa de modelo de mensaje
     """
 
-    Client = "client"
-    Agent = "agent"
+    CLIENT = "client"
+    AGENT = "agent"
 
 class BankChoices(_TextChoices):
     BANCO_ITAU = "Banco Itau"
