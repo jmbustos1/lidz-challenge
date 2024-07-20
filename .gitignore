@@ -12,3 +12,6 @@ db.sqlite3
 
 # Environments
 .env
+
+# Test
+.pytest_cache
