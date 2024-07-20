@@ -2,12 +2,16 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+from faker import Faker
 from unittest.mock import patch
 from .models import Client, Message, Debt
 from .serializers import ClientSerializer, ClientDetailSerializer
 from django.utils import timezone
 from datetime import timedelta
-
+from scoring.enums import (
+    ModelMessage,
+    BankChoices,
+)
 faker = Faker()
 
 @pytest.fixture
@@ -33,18 +37,18 @@ def create_client_url():
 @pytest.fixture
 def client():
     return Client.objects.create(
-        name="Juan Perez",
-        rut="11.111.111-1",
-        salary=1000000,
-        savings=5000000
+        name=faker.name(),
+        rut=faker.unique.bothify(text='##.###.###-#'),
+        salary=faker.random_int(min=500000, max=2000000),
+        savings=faker.random_int(min=1000000, max=10000000)
     )
 
 @pytest.fixture
 def message(client):
     return Message.objects.create(
         client=client,
-        text="Hola, quiero comprar un dpto",
-        role="client",
+        text=faker.sentence(),
+        role=faker.random_element(elements=ModelMessage.values),
         sent_at=timezone.now()
     )
 
@@ -52,9 +56,9 @@ def message(client):
 def debt(client):
     return Debt.objects.create(
         client=client,
-        amount=1000000,
-        institution="Banco Estado",
-        due_date=timezone.now().date()
+        amount=faker.random_int(min=50000, max=5000000),
+        institution=faker.random_element(elements=BankChoices.values),
+        due_date=faker.date()
     )
 
 @pytest.mark.django_db
@@ -78,22 +82,22 @@ def test_get_client_detail(mock_get, client_detail_url, client, api_client):
 @pytest.mark.django_db
 def test_create_client(create_client_url, api_client):
     data = {
-        "name": "Maria Lopez",
-        "rut": "31.111.111-1",
-        "salary": 1200000,
-        "savings": 3000000,
+        "name": faker.name(),
+        "rut": faker.unique.bothify(text='##.###.###-#'),
+        "salary": faker.random_int(min=500000, max=2000000),
+        "savings": faker.random_int(min=1000000, max=10000000),
         "messages": [
             {
-                "text": "Quiero más información",
-                "role": "client",
-                "sent_at": "2023-12-24T00:00:00.000Z"
+                "text": faker.sentence(),
+                "role": faker.random_element(elements=('client', 'agent')),
+                "sent_at": faker.date_time_this_year().isoformat()
             }
         ],
         "debts": [
             {
-                "amount": 200000,
-                "institution": "Banco Santander",
-                "due_date": "2023-12-24"
+                "amount": faker.random_int(min=50000, max=5000000),
+                "institution": faker.random_element(elements=BankChoices.values),
+                "due_date": faker.date()
             }
         ]
     }
@@ -101,20 +105,20 @@ def test_create_client(create_client_url, api_client):
     assert response.status_code == status.HTTP_201_CREATED
 
     # Verificar que el cliente y sus relaciones fueron creados correctamente
-    client = Client.objects.get(rut="31.111.111-1")
-    assert client.name == "Maria Lopez"
-    assert client.salary == 1200000
-    assert client.savings == 3000000
+    client = Client.objects.get(rut=data["rut"])
+    assert client.name == data["name"]
+    assert client.salary == data["salary"]
+    assert client.savings == data["savings"]
 
     messages = Message.objects.filter(client=client)
     assert len(messages) == 1
-    assert messages[0].text == "Quiero más información"
-    assert messages[0].role == "client"
+    assert messages[0].text == data["messages"][0]["text"]
+    assert messages[0].role == data["messages"][0]["role"]
 
     debts = Debt.objects.filter(client=client)
     assert len(debts) == 1
-    assert debts[0].amount == 200000
-    assert debts[0].institution == "Banco Santander"
+    assert debts[0].amount == data["debts"][0]["amount"]
+    assert debts[0].institution == data["debts"][0]["institution"]
 
 @pytest.mark.django_db
 def test_clients_to_do_follow_up(follow_up_url, client, message, debt, api_client):
