@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Client
 from .serializers import ClientSerializer, ClientDetailSerializer
+from .utils.scoring_utils import calculate_score
 
 class ClientListView(APIView):
     def get(self, request):
@@ -39,3 +40,13 @@ class ClientCreateView(APIView):
             detail_serializer = ClientDetailSerializer(client)
             return Response(detail_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ClientScoreView(APIView):
+    def get(self, request, id):
+        try:
+            client = Client.objects.get(id=id)
+        except Client.DoesNotExist:
+            return Response({"error": "Client not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        score = calculate_score(client)
+        return Response({"score": score}, status=status.HTTP_200_OK)
