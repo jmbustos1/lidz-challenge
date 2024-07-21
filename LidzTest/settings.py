@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'scoring',
+    'stats',
     'rest_framework',
 ]
 

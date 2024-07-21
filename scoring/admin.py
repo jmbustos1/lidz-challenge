@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Client, Message, Debt
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'rut', 'salary', 'savings')
+    list_display = ('id', 'name', 'rut', 'salary', 'savings', 'age')
     search_fields = ('name', 'rut')
     readonly_fields = ('id',)
 

@@ -5,6 +5,7 @@ from scoring.models import Client, Message, Debt
 from scoring.enums import ModelMessage, BankChoices
 from scoring.serializers import ClientSerializer
 from datetime import timedelta
+from stats.utils.stats_utils import calculate_and_save_statistics  # Importar la función
 
 class Command(BaseCommand):
     "datos de prueba"
@@ -20,6 +21,7 @@ class Command(BaseCommand):
                 "rut": faker.unique.bothify(text='##.###.###-#'),
                 "salary": faker.random_int(min=500000, max=2000000),
                 "savings": faker.random_int(min=1000000, max=10000000),
+                "age": faker.random_int(min=15, max=110),
                 "messages": self.generate_intercalated_messages(faker, message_count),
                 "debts": [
                     {
@@ -37,7 +39,7 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.ERROR(f'Error agregando cliente {client_data["name"]}'))
                 self.stdout.write(self.style.ERROR(f'Errores: {serializer.errors}'))
-
+        calculate_and_save_statistics()  # Llamar a la función externa
     def generate_intercalated_messages(self, faker, num_messages):
         messages = []
         base_time = faker.date_time_this_year()

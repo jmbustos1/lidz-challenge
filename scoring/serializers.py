@@ -22,14 +22,14 @@ class ClientDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
-        fields = ['id', 'name', 'rut', 'salary', 'savings', 'messages', 'debts']
+        fields = ['id', 'name', 'rut', 'salary', 'savings', 'age', 'messages', 'debts']
     
 class ClientSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, required=False)
     debts = DebtSerializer(many=True, required=False)
     class Meta:
         model = Client
-        fields = ['id', 'name', 'rut', 'salary', 'savings', 'messages', 'debts']
+        fields = ['id', 'name', 'rut', 'salary', 'savings', 'age', 'messages', 'debts']
 
     def create(self, validated_data):
         messages_data = validated_data.pop('messages', [])

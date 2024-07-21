@@ -9,6 +9,7 @@ class Client(models.Model):
     rut = models.CharField(max_length=12, unique=True)
     salary = models.IntegerField()
     savings = models.IntegerField()
+    age = models.IntegerField(null=True, blank=True)  # Nuevo campo de edad
     email = models.EmailField(max_length=254, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

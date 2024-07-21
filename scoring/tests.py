@@ -86,6 +86,7 @@ def test_create_client(create_client_url, api_client):
         "rut": faker.unique.bothify(text='##.###.###-#'),
         "salary": faker.random_int(min=500000, max=2000000),
         "savings": faker.random_int(min=1000000, max=10000000),
+        "age": faker.random_int(min=15, max=110),
         "messages": [
             {
                 "text": faker.sentence(),
@@ -107,6 +108,7 @@ def test_create_client(create_client_url, api_client):
     # Verificar que el cliente y sus relaciones fueron creados correctamente
     client = Client.objects.get(rut=data["rut"])
     assert client.name == data["name"]
+    assert client.name == data["age"]
     assert client.salary == data["salary"]
     assert client.savings == data["savings"]
 
