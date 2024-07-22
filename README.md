@@ -46,3 +46,11 @@
 
 # Diseño de score
 ![Diagrama del Proyecto](diagram.png)
+
+## Explicacion:
+1. **Score de salario**
+Para este item es necesario asumir el interes por cierto departamento
+imaginemos uno de 3000 UF con pie de 20%.
+Luego de contar con ese supuesto es necesario realizar el calculo de 
+cada cuotael cual se muestra a continuacion:
+$$\text{Pago Mensual} = \frac{\text{Monto del Préstamo} \times \text{Tasa de Interés Mensual}}{1 - (1 + \text{Tasa de Interés Mensual})^{-\text{Número de Pagos}}}$$
