@@ -62,6 +62,7 @@ $$$\text{Cuota} = \frac{\text{Salario}}{Pago Mensual} $$
 
 Finalmente se ajusta linealmente el factor tal que si alguien tiene salario 8
 veces mayor a la cuota entonces se le asigna 100 y si es igual entonces es 0
+
     ```python
     def calcular_puntaje_capacidad_pago(salario, pago_mensual):
         """
@@ -84,6 +85,7 @@ para este item se considera un aproach similar al de salario pero esta vez
 el mapeo sera exponencial, es decir, si una persona tiene 18 o menos años
 se le asignara un score de 0 y si tiene 70 un score de 100
 mientras que interpolamos exponencialmente decreciente entre los puntos
+
     ```python
     import math
 
