@@ -47,7 +47,7 @@ def estandarizar_deudas(cliente_id, latest_stats):
     return deudas_estandarizadas
 # Función para ajustar la deuda según la antigüedad
 def debt_risk_value(deuda, valor):
-    days_old = (datetime.now().date() - deuda.due_date).days
+    days_old = (datetime.now().date() - deuda.dueDate).days
     years_old = days_old / 365.25
     adjustment_factor = debt_risk(years_old)
     adjusted_amount = valor * adjustment_factor
@@ -108,13 +108,15 @@ def calculate_score(client):
 
     else:
         print(f'El cliente {client.id} no tiene deudas para estandarizar')
+        puntaje_deuda = 100
 
     pago_mensual = calcular_pago_mensual(client.salary)
     print("PAGO MENSUAL", pago_mensual, "SALARIO",  client.salary/uf)
-    puntaje_capacidad_pago = calcular_puntaje_capacidad_pago(client.salary/uf, pie_departamento)
+    puntaje_capacidad_pago = calcular_puntaje_capacidad_pago(client.salary/uf, pago_mensual)
     print("puntaje_capacidad_pago", puntaje_capacidad_pago)
     # Calcular puntaje de ahorros
-    puntaje_ahorros = calcular_puntaje_ahorros(client.savings/uf, 600)
+    print("PLATA AHORRADA",client.savings/uf, pie_departamento)
+    puntaje_ahorros = calcular_puntaje_ahorros(client.savings/uf, pie_departamento)
     print("puntaje_ahorros", puntaje_ahorros)
     # Calcular puntaje de edad
     puntaje_edad = calcular_puntaje_edad(client.age)

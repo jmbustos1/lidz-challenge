@@ -27,7 +27,7 @@ class Command(BaseCommand):
                     {
                         "amount": faker.random_int(min=50000, max=5000000),
                         "institution": random.choice([choice.value for choice in BankChoices]),
-                        "due_date": faker.date()
+                        "dueDate": faker.date()
                     } for _ in range(random.randint(1, debt_count))
                 ]
             }
@@ -46,11 +46,11 @@ class Command(BaseCommand):
 
         for i in range(num_messages):
             role = ModelMessage.CLIENT if i % 2 == 0 else ModelMessage.AGENT
-            sent_at = base_time + timedelta(minutes=i * 10)  # Aumentar 10 minutos entre cada mensaje
+            sentAt = base_time + timedelta(minutes=i * 10)  # Aumentar 10 minutos entre cada mensaje
             message_data = {
                 "text": faker.sentence(),
                 "role": role,
-                "sent_at": sent_at.isoformat()
+                "sentAt": sentAt.isoformat()
             }
             messages.append(message_data)
 

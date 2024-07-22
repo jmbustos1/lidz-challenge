@@ -5,16 +5,16 @@ from .models import Client, Message, Debt
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sent_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%fZ", input_formats=["%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"])
+    sentAt = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%fZ", input_formats=["%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"])
     class Meta:
         model = Message
-        fields = ['id', 'text', 'role', 'sent_at']
+        fields = ['id', 'text', 'role', 'sentAt']
 
 class DebtSerializer(serializers.ModelSerializer):
-    due_date = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S"])
+    dueDate = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d", "%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S"])
     class Meta:
         model = Debt
-        fields = ['id', 'amount', 'institution', 'due_date']
+        fields = ['id', 'amount', 'institution', 'dueDate']
 
 class ClientDetailSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)

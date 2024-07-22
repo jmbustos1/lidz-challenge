@@ -49,7 +49,7 @@ def message(client):
         client=client,
         text=faker.sentence(),
         role=faker.random_element(elements=ModelMessage.values),
-        sent_at=timezone.now()
+        sentAt=timezone.now()
     )
 
 @pytest.fixture
@@ -58,7 +58,7 @@ def debt(client):
         client=client,
         amount=faker.random_int(min=50000, max=5000000),
         institution=faker.random_element(elements=BankChoices.values),
-        due_date=faker.date()
+        dueDate=faker.date()
     )
 
 @pytest.mark.django_db
@@ -91,14 +91,14 @@ def test_create_client(create_client_url, api_client):
             {
                 "text": faker.sentence(),
                 "role": faker.random_element(elements=('client', 'agent')),
-                "sent_at": faker.date_time_this_year().isoformat()
+                "sentAt": faker.date_time_this_year().isoformat()
             }
         ],
         "debts": [
             {
                 "amount": faker.random_int(min=50000, max=5000000),
                 "institution": faker.random_element(elements=BankChoices.values),
-                "due_date": faker.date()
+                "dueDate": faker.date()
             }
         ]
     }
@@ -126,7 +126,7 @@ def test_create_client(create_client_url, api_client):
 def test_clients_to_do_follow_up(follow_up_url, client, message, debt, api_client):
     seven_days_ago = timezone.now() - timedelta(days=7)
     response = api_client.get(follow_up_url)
-    clients = Client.objects.filter(messages__sent_at__lt=seven_days_ago).distinct()
+    clients = Client.objects.filter(messages__sentAt__lt=seven_days_ago).distinct()
     serializer = ClientSerializer(clients, many=True)
     assert response.status_code == status.HTTP_200_OK
     assert response.data == serializer.data

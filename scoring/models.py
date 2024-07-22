@@ -24,17 +24,17 @@ class Message(models.Model):
     client = models.ForeignKey(Client, related_name='messages', on_delete=models.CASCADE)
     text = models.TextField()
     role = models.CharField(max_length=10, choices=ModelMessage.choices)
-    sent_at = models.DateTimeField()
+    sentAt = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.role} - {self.sent_at}: {self.text[:20]}"
+        return f"{self.role} - {self.sentAt}: {self.text[:20]}"
     
 
 class Debt(models.Model):
     client = models.ForeignKey(Client, related_name='debts', on_delete=models.CASCADE)
     institution = models.CharField(max_length=100, choices=BankChoices.choices)
     amount = models.IntegerField()
-    due_date = models.DateField()
+    dueDate = models.DateField()
 
     def __str__(self):
-        return f"{self.institution} - {self.amount} - {self.due_date}"
+        return f"{self.institution} - {self.amount} - {self.dueDate}"

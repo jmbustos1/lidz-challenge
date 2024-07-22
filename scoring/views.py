@@ -28,7 +28,7 @@ class ClientDetailView(APIView):
 class ClientsToDoFollowUpView(APIView):
     def get(self, request):
         seven_days = timezone.now() - timedelta(days=7)
-        clients = Client.objects.filter(messages__sent_at__lt=seven_days).distinct()
+        clients = Client.objects.filter(messages__sentAt__lt=seven_days).distinct()
         serializer = ClientSerializer(clients, many=True)
         return Response(serializer.data)
 

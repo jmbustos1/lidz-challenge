@@ -7,12 +7,12 @@ class ClientAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
 
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'client', 'text', 'role', 'sent_at')
+    list_display = ('id', 'client', 'text', 'role', 'sentAt')
     search_fields = ('client__name', 'text')
     list_filter = ('role',)
 
 class DebtAdmin(admin.ModelAdmin):
-    list_display = ('id', 'client', 'institution', 'amount', 'due_date')
+    list_display = ('id', 'client', 'institution', 'amount', 'dueDate')
     search_fields = ('client__name', 'institution')
     list_filter = ('institution',)
 

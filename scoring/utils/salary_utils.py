@@ -19,6 +19,7 @@ def calcular_pago_mensual(propiedad):
 
 
 def calcular_puntaje_capacidad_pago(salario, pago_mensual):
+    print("CUENTAS", salario,pago_mensual)
     if salario <= pago_mensual:
         return 0
     elif salario >= 6 * pago_mensual:
