@@ -50,5 +50,5 @@ class ClientScoreView(APIView):
         except Client.DoesNotExist:
             return Response({"error": "Client not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        score = calculate_score(client)
+        score = calculate_score(client) # Scoring funcion de score
         return Response({"score": score}, status=status.HTTP_200_OK)

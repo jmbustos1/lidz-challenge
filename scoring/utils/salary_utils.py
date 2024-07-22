@@ -1,25 +1,32 @@
+
+
 def calcular_pago_mensual(propiedad):
-    # Parámetros del crédito hipotecario
+    """
+    Funciones que calculan el valor de los pagos
+    de un credito hipotecario
+    """    
     valor_uf=2400
-    # porcentaje_pie=20
-    valor_pie=480
+    valor_pie=600
     tasa_interes_anual = 0.05
     numero_meses = 240
 
-    # Cálculo de la tasa de interés mensual
     tasa_interes_mensual = tasa_interes_anual / 12
 
-    # Monto del préstamo (valor de la propiedad menos el pie)
     monto_prestamo = valor_uf - valor_pie
 
-    # Fórmula para calcular el pago mensual
     pago_mensual = (monto_prestamo * tasa_interes_mensual) / (1 - (1 + tasa_interes_mensual) ** -numero_meses)
     
     return pago_mensual
 
 
 def calcular_puntaje_capacidad_pago(salario, pago_mensual):
-    print("CUENTAS", salario,pago_mensual)
+    """
+    Asigan 100 si tu salario es
+    6 veces superior a la cuota
+    del credito hipotecario
+    y 0 si es igual o menor,
+    interpola lineal entre los valores
+    """
     if salario <= pago_mensual:
         return 0
     elif salario >= 6 * pago_mensual:

@@ -12,6 +12,9 @@ from scoring.enums import (
     ModelMessage,
     BankChoices,
 )
+
+"""Tests para los endpoints y modelos implementados"""
+
 faker = Faker()
 
 @pytest.fixture
@@ -105,7 +108,6 @@ def test_create_client(create_client_url, api_client):
     response = api_client.post(create_client_url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
 
-    # Verificar que el cliente y sus relaciones fueron creados correctamente
     client = Client.objects.get(rut=data["rut"])
     assert client.name == data["name"]
     assert client.name == data["age"]

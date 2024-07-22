@@ -1,6 +1,14 @@
 import math
 from datetime import datetime
 
+"""
+funcion que vale 1 en 0
+es decir a los 0 años de deuda no pondera
+sin embargo acelera con el tiempo 
+alcanzando el maximo punto de
+inflexion alrededor de los 5 años
+es decir pesan mas las deudas antiguas
+"""
 x_move = 1
 factor = 1/6
 y_move = 2.6 + 4

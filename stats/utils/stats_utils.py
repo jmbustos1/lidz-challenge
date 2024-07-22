@@ -5,20 +5,22 @@ from scoring.enums import BankChoices
 import numpy as np
 
 def calculate_and_save_statistics():
-    # Obtener la lista de bancos
+    """
+    Funcion para calcular y agregar a los modelos
+    datos estadisticos de los clientes
+    esto servira para el modelo de deuda posteriormente.
+    """
     bancos = [choice.value for choice in BankChoices]
     
     for banco in bancos:
-        # Calcular estadísticas de deuda para cada banco
         deudas = list(Debt.objects.filter(institution=banco).values_list('amount', flat=True))
         if deudas:
             media_deuda = np.mean(deudas)
-            desviacion_estandar_deuda = np.std(deudas)  # Desviación estándar de la población
+            desviacion_estandar_deuda = np.std(deudas)
             deuda_minima = np.min(deudas)
             deuda_maxima = np.max(deudas)
             cantidad_datos = len(deudas)
             
-            # Imprimir valores para verificación
             print(f'Banco: {banco}')
             print(f'Deudas: {deudas}')
             print(f'Media de deuda: {media_deuda}')
@@ -35,16 +37,14 @@ def calculate_and_save_statistics():
                 cantidad_datos = cantidad_datos
             )
 
-    # Calcular estadísticas de salario para cada banco
     salarios = list(Client.objects.values_list('salary', flat=True))
     if salarios:
         media_salario = np.mean(salarios)
-        desviacion_estandar_salario = np.std(salarios)  # Desviación estándar de la población
+        desviacion_estandar_salario = np.std(salarios)
         salario_minimo = np.min(salarios)
         salario_maximo = np.max(salarios)
         cantidad_datos = len(salarios)
         
-        # Imprimir valores para verificación
         print(f'Salarios: {salarios}')
         print(f'Media de salario: {media_salario}')
         print(f'Desviación estándar de salario: {desviacion_estandar_salario}')

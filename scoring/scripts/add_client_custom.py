@@ -1,10 +1,9 @@
 import requests
 import json
 
-# URL de la API
 url = "http://127.0.0.1:8000/clients/"
 
-# Datos del cliente
+"""Funcion para agregar un unico cliente"""
 data = {
     "name": "Juan Perez",
     "rut": "11.111.120-1",
@@ -32,9 +31,7 @@ data = {
     ]
 }
 
-# Realizar la solicitud POST
 response = requests.post(url, headers={"Content-Type": "application/json"}, data=json.dumps(data))
 
-# Imprimir la respuesta
 print("Status Code:", response.status_code)
 print("Response JSON:", response.json())

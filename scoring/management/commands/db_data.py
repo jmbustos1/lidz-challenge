@@ -5,10 +5,17 @@ from scoring.models import Client, Message, Debt
 from scoring.enums import ModelMessage, BankChoices
 from scoring.serializers import ClientSerializer
 from datetime import timedelta
-from stats.utils.stats_utils import calculate_and_save_statistics  # Importar la función
+from stats.utils.stats_utils import calculate_and_save_statistics
 
 class Command(BaseCommand):
-    "datos de prueba"
+    """
+    datos de prueba
+    message_count = 4
+    client_count = 4
+    debt_count = 3
+    Pueden ser editados para
+    ajustar poblacion a la basede datos
+    """
     
     def handle(self, *args, **kwargs):
         faker = Faker()
@@ -39,14 +46,14 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.ERROR(f'Error agregando cliente {client_data["name"]}'))
                 self.stdout.write(self.style.ERROR(f'Errores: {serializer.errors}'))
-        calculate_and_save_statistics()  # Llamar a la función externa
+        calculate_and_save_statistics()  # Funcion para generar datos estadisticos de deudas.
     def generate_intercalated_messages(self, faker, num_messages):
         messages = []
         base_time = faker.date_time_this_year()
 
         for i in range(num_messages):
             role = ModelMessage.CLIENT if i % 2 == 0 else ModelMessage.AGENT
-            sentAt = base_time + timedelta(minutes=i * 10)  # Aumentar 10 minutos entre cada mensaje
+            sentAt = base_time + timedelta(minutes=i * 10)
             message_data = {
                 "text": faker.sentence(),
                 "role": role,

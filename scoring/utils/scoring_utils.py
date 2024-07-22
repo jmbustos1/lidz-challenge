@@ -10,6 +10,11 @@ from scoring.models import Client, Debt, Message
 from .salary_utils import calcular_pago_mensual, calcular_puntaje_capacidad_pago
 
 def get_latest_statistics():
+    """
+    Extrae de la app EstadisticasDeuda
+    los valores de la poblacion relevantes
+    para un estandarizado
+    """
     latest_stats = {}
     for bank in BankChoices:
         latest_stat = EstadisticasDeuda.objects.filter(institution=bank.value).order_by('-timestamp').first()
@@ -22,8 +27,11 @@ def get_latest_statistics():
             }
     return latest_stats
 
-# Función para estandarizar las deudas
 def estandarizar_deudas(cliente_id, latest_stats):
+    """
+    Funcion para estandarizar las deudas por banco
+    del cliente.id
+    """
     client = Client.objects.get(id=cliente_id)
     deudas = Debt.objects.filter(client=client)
     
@@ -37,7 +45,7 @@ def estandarizar_deudas(cliente_id, latest_stats):
             if desviacion_estandar != 0:
                 estandarizada = (deuda.amount - media) / desviacion_estandar
             else:
-                estandarizada = 0  # Manejar el caso cuando la desviación estándar es cero
+                estandarizada = 0
 
             deudas_estandarizadas.append({
                 'deuda': deuda,
@@ -45,16 +53,25 @@ def estandarizar_deudas(cliente_id, latest_stats):
                 'valor_estandarizado': estandarizada
             })
     return deudas_estandarizadas
-# Función para ajustar la deuda según la antigüedad
+
 def debt_risk_value(deuda, valor):
+    """
+    Mapeo de la Duncion de riesgo
+    """
     days_old = (datetime.now().date() - deuda.dueDate).days
     years_old = days_old / 365.25
     adjustment_factor = debt_risk(years_old)
     adjusted_amount = valor * adjustment_factor
     return adjusted_amount
 
-# Función para ajustar las deudas estandarizadas por antigüedad
+
 def ajustar_deudas_estandarizadas(deudas_estandarizadas):
+    """
+    Aplica la funcion de riesgo similar
+    a una sigmoide a las deudas del cliente
+    con esto le otorgamos mas
+    peso a las deudas mas antiguas
+    """
     deudas_ajustadas = []
     for deuda_info in deudas_estandarizadas:
         deuda = deuda_info['deuda']
@@ -67,8 +84,12 @@ def ajustar_deudas_estandarizadas(deudas_estandarizadas):
         })
     return deudas_ajustadas
 
-# Función para normalizar las deudas ajustadas entre 0 y 100
+
 def normalizar_deudas(deudas_ajustadas):
+    """
+    Funcion para escalar las deudas
+    entre 0 y 100
+    """
     deudas_normalizadas = []
     for deuda_info in deudas_ajustadas:
         valor_ajustado = deuda_info['valor_ajustado']
@@ -82,12 +103,10 @@ def prom(deudas):
 def calculate_score(client):
     """
     Calcula el puntaje de un cliente basado en ciertos criterios.
-    Por ahora, la lógica es simplificada, pero puede expandirse según sea necesario.
     """
     uf = 37591
     pie_departamento = 600
     latest_stats = get_latest_statistics()
-    # clients = Client.objects.all()
 
 
     deudas_estandarizadas = estandarizar_deudas(client.id, latest_stats)
@@ -111,27 +130,25 @@ def calculate_score(client):
         puntaje_deuda = 100
 
     pago_mensual = calcular_pago_mensual(client.salary)
-    print("PAGO MENSUAL", pago_mensual, "SALARIO",  client.salary/uf)
     puntaje_capacidad_pago = calcular_puntaje_capacidad_pago(client.salary/uf, pago_mensual)
-    print("puntaje_capacidad_pago", puntaje_capacidad_pago)
+
     # Calcular puntaje de ahorros
-    print("PLATA AHORRADA",client.savings/uf, pie_departamento)
     puntaje_ahorros = calcular_puntaje_ahorros(client.savings/uf, pie_departamento)
-    print("puntaje_ahorros", puntaje_ahorros)
+
     # Calcular puntaje de edad
     puntaje_edad = calcular_puntaje_edad(client.age)
-    print(" puntaje_edad ", puntaje_edad)
+
     # Calcular puntaje de mensajes
     cantidad_mensajes = Message.objects.filter(client=client).count()
     puntaje_mensajes = calcular_puntaje_mensajes(cantidad_mensajes)
-    print("puntaje_mensajes", puntaje_mensajes)
 
-        # Asignar ponderaciones a los puntajes
+
+    # Asignar ponderaciones a los puntajes
     peso_deuda = 0.20
     peso_capacidad_pago = 0.30
     peso_ahorros = 0.20
     peso_mensajes = 0.10
-    peso_edad = 0.2  # Asumiendo que no se usa el puntaje de edad en el cálculo final según tus instrucciones
+    peso_edad = 0.2
 
     puntaje_final = (
         puntaje_deuda * peso_deuda +
