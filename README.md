@@ -43,3 +43,6 @@
     ```bash
     curl http://localhost:8000/clients
     ```
+
+# Diseño de score
+![Diagrama del Proyecto](diagram.png)
