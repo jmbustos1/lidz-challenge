@@ -19,7 +19,7 @@ class Command(BaseCommand):
             client_data = {
                 "name": faker.name(),
                 "rut": faker.unique.bothify(text='##.###.###-#'),
-                "salary": faker.random_int(min=500000, max=2000000),
+                "salary": faker.random_int(min=1000000, max=4000000),
                 "savings": faker.random_int(min=1000000, max=10000000),
                 "age": faker.random_int(min=15, max=110),
                 "messages": self.generate_intercalated_messages(faker, message_count),

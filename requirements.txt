@@ -9,3 +9,9 @@ pytest==6.2
 pytest-django==4.4
 pytest-mock==3.6
 Faker==9.9.0
+
+# Math
+numpy==2.0.1
+
+# Request
+requests==2.32.3

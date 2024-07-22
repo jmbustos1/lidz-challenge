@@ -4,6 +4,7 @@ from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from stats.utils.stats_utils import calculate_and_save_statistics
 from .models import Client
 from .serializers import ClientSerializer, ClientDetailSerializer
 from .utils.scoring_utils import calculate_score
@@ -37,6 +38,7 @@ class ClientCreateView(APIView):
         serializer = ClientSerializer(data=request.data)
         if serializer.is_valid():
             client = serializer.save()
+            calculate_and_save_statistics()
             detail_serializer = ClientDetailSerializer(client)
             return Response(detail_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
