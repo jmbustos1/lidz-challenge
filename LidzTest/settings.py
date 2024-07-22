@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ksq!1@e1vvv7m1v230dcj$jkvr%*fe+hvoqo_n)@smtm94(4j2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'LidzTest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('DB_USER', 'db_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        'HOST': os.getenv('DB_HOST', 'postgres'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -123,7 +123,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1"]
+
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = "/store/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 # Usar la base de datos para almacenar sesiones
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 

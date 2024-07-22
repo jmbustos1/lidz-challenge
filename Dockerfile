@@ -24,8 +24,11 @@ WORKDIR /LidzTest
 COPY requirements.txt /LidzTest/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /LidzTest/
+COPY ./requirements.txt /api/requirements.txt
+RUN pip install -r /api/requirements.txt
+
+COPY . .
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
+EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
