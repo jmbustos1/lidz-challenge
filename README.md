@@ -49,10 +49,9 @@
 
 ## Explicacion:
 1. **Score de salario**
-Para este item es necesario asumir el interes por cierto departamento
-imaginemos uno de 3000 UF con pie de 20%.
-Luego de contar con ese supuesto es necesario realizar el calculo de 
-cada cuotael cual se muestra a continuacion:
+Para este ítem, es necesario asumir el interés por cierto departamento. 
+Imaginemos uno de 3000 UF con un pie de 20%. Luego de contar con ese supuesto, 
+es necesario realizar el cálculo de cada cuota, el cual se muestra a continuación:
 
 
 $$\text{Pago Mensual} = \frac{\text{Monto del Préstamo} \times \text{Tasa de Interés Mensual}}{1 - (1 + \text{Tasa de Interés Mensual})^{-\text{Número de Pagos}}}$$
@@ -60,8 +59,9 @@ $$\text{Pago Mensual} = \frac{\text{Monto del Préstamo} \times \text{Tasa de In
 Luego la capacidad de pago se da calculando un factor
 $$\text{Cuota} = \frac{\text{Salario}}{Pago Mensual} $$
 
-Finalmente se ajusta linealmente el factor tal que si alguien tiene salario 8
-veces mayor a la cuota entonces se le asigna 100 y si es igual entonces es 0
+Finalmente, se ajusta linealmente el factor tal que, 
+si alguien tiene un salario 8 veces mayor a la cuota, 
+se le asigna 100, y si es igual, entonces es 0
 
 
 ```python
@@ -82,10 +82,10 @@ veces mayor a la cuota entonces se le asigna 100 y si es igual entonces es 0
 ```
 
 2. **Score de edad**
-para este item se considera un aproach similar al de salario pero esta vez
-el mapeo sera exponencial, es decir, si una persona tiene 18 o menos años
-se le asignara un score de 0 y si tiene 70 un score de 100
-mientras que interpolamos exponencialmente decreciente entre los puntos
+Para este ítem, se considera un enfoque similar al del salario, 
+pero esta vez el mapeo será exponencial. Es decir, si una persona 
+tiene 18 años o menos, se le asignará un puntaje de 0, y si tiene 70 años, 
+un puntaje de 100, mientras que interpolamos exponencialmente decreciente entre esos puntos.
 
 ```python
     import math
@@ -103,8 +103,8 @@ mientras que interpolamos exponencialmente decreciente entre los puntos
 ```
 
 3. **Score de ahorros**
-El aproach es identico al del salario, es decir calculamos el valor del pie
-y ajustamos linealmente el valor del score.
+El enfoque es idéntico al del salario. Es decir, 
+calculamos el valor del pie y ajustamos linealmente el valor del puntaje.
 
 ```python
     def calcular_puntaje_ahorros(savings, down_payment):
@@ -125,8 +125,8 @@ y ajustamos linealmente el valor del score.
 ```
 
 4. **Score de mensajes**
-El aproach es identico al del salario, es decir calculamos la
-cantidad de mensajes y ajustamos linealmente el valor del score.
+El enfoque es idéntico al del salario. Es decir, 
+calculamos la cantidad de mensajes y ajustamos linealmente el valor del puntaje.
 
 ```python
     def calcular_puntaje_ahorros(savings, down_payment):
@@ -147,35 +147,28 @@ cantidad de mensajes y ajustamos linealmente el valor del score.
 ```
 
 4. **Score de deudas**
-Para definir el score de deudas, es necesario preguntarse si corresponde hacer un analisis mas exaustivo.
-Para ello se consideran 3 datos.
+Para definir el puntaje de deudas, es necesario preguntarse si corresponde hacer un análisis más exhaustivo. Para ello, se consideran tres datos:
 
-- Las deudas tienen un horizonte de tiempo, es decir, es mas "grave" si es mas antigua.
-- Es dificil asociar las deudas a un departamento tan facilmente como se asocia el salario a un
-departamento ya que, una deuda no compra directamente un departamento.
-- Al no poder asociar las deudas tan facilmente a un departamento no tenemos asociaciones absolutas
-que podemos implementar.
+- Las deudas tienen un horizonte de tiempo; es decir, es más "grave" si es más antigua.
+- Es difícil asociar las deudas a un departamento tan fácilmente como se asocia el salario a un departamento, ya que una deuda no compra directamente un departamento.
+- Al no poder asociar las deudas tan fácilmente a un departamento, no tenemos asociaciones absolutas que podamos implementar.
+Para abordar estas problemáticas, vamos a implementar una solución basada en los datos de la población:
 
-Para abordar estas problematicas vamos a implementar una solucion basada en los datos de la poblacion:
+- Primero, estandarizamos los datos en una distribución normal basada en la media y la desviación estándar de los datos disponibles.
+Luego, ajustamos con una función adecuada.
 
-- Primero estandarizamos los datos en una distribucion normal basado en la media y la desviacion estandar 
-de los datos disponibles
-- Luego ajustamos con una funcion
 
 $$ f(x) = sgn(x)log(1+|x|)$$
 
-Esta funcion tiene un comportamiento exponencial al inicio y luego satura al final sin
-ser asintotica. En teoria una deuda podria tener una
-antiguedad infinita entonces hay que asignarle un valor estrictamente creciente
-pero no tan "severo" como un crecimiento lineal o estrictamente exponencial
-mientras que al inicio de adquirir la deuda se puede ser mas estricto. 
+Esta función tiene un comportamiento exponencial al inicio y luego se satura al final sin ser asintótica. En teoría, una deuda podría tener una antigüedad infinita, por lo tanto, hay que asignarle un valor estrictamente creciente, pero no tan "severo" como un crecimiento lineal o estrictamente exponencial, mientras que al inicio de adquirir la deuda se puede ser más estricto.
 
-- Finalmente escalamos para 0 y 100, integramos para cada banco y tenemos el riesgo.
+- Finalmente, escalamos los valores entre 0 y 100, integramos para cada banco y obtenemos el riesgo.
 
 
 4. **Integracion**
-Teniendo cada puntaje finalmente se procede a realizar una suma ponderada
-asignando pesos a cada deuda, en este caso tomamos:
+Teniendo cada puntaje, finalmente se procede a realizar 
+una suma ponderada asignando pesos a cada deuda. En este caso, tomamos:
+
 - 20% score de ahorro
 - 20% score de deuda
 - 30% score de salario
@@ -184,13 +177,6 @@ asignando pesos a cada deuda, en este caso tomamos:
 
 
 ## Discusion
-Si bien es cierto estos algoritmos sirven en un inicio cuando es necesario empezar a procesar clientes,
-a futuro a medida que se recopilan mas datos podemos usar el analisis de ellos junto
-con el aprendizaje de maquinas para
-generar mejores estimaciones del score de los clientes, evaluando si cierto cliente
-con ciertos datos asociados compro o no un departamento.
+Si bien es cierto que estos algoritmos sirven en un inicio cuando es necesario empezar a procesar clientes, a futuro, a medida que se recopilan más datos, podemos usar el análisis de ellos junto con el aprendizaje de máquinas para generar mejores estimaciones del puntaje de los clientes, evaluando si cierto cliente con ciertos datos asociados compró o no un departamento.
 
-Por ejemplo, un cliente con un set de datos X compro un departamente y otro no. Asi juntamos
-un set de datos para generar un algoritmo, y asignamos otro set de datos como entrenamiento.
-A medida que los datos crecen comparamos la eficiencia de los algoritmos. Si la teoria funciona
-deberiamos eventualmente encontrar pesos que funcionan mejor que el algoritmo propuesto.
+Por ejemplo, un cliente con un conjunto de datos X compró un departamento y otro no. Así, juntamos un conjunto de datos para generar un algoritmo y asignamos otro conjunto de datos como entrenamiento. A medida que los datos crecen, comparamos la eficiencia de los algoritmos. Si la teoría funciona, deberíamos eventualmente encontrar pesos que funcionen mejor que el algoritmo propuesto.
