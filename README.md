@@ -170,21 +170,27 @@ antiguedad infinita entonces hay que asignarle un valor estrictamente creciente
 pero no tan "severo" como un crecimiento lineal o estrictamente exponencial
 mientras que al inicio de adquirir la deuda se puede ser mas estricto. 
 
+- Finalmente escalamos para 0 y 100, integramos para cada banco y tenemos el riesgo.
 
-```python
-    def calcular_puntaje_ahorros(savings, down_payment):
-        """
-        Funcion que asigna valor a tus ahorros
-        si tienes ahorrado la mitad del pie
-        asigna 0
-        si tienes ahorrado 8 veces el pie 
-        asigna 100, e interpola lineal
-        """
-        if savings <= down_payment / 2:
-            return 0
-        elif savings >= 8 * down_payment:
-            return 100
-        else:
-            return (savings - down_payment / 2) / (8 * down_payment - down_payment / 2) * 100
 
-```
+4. **Integracion**
+Teniendo cada puntaje finalmente se procede a realizar una suma ponderada
+asignando pesos a cada deuda, en este caso tomamos:
+- 20% score de ahorro
+- 20% score de deuda
+- 30% score de salario
+- 20% score de deudas
+- 10% score de mensajes
+
+
+## Discusion
+Si bien es cierto estos algoritmos sirven en un inicio cuando es necesario empezar a procesar clientes,
+a futuro a medida que se recopilan mas datos podemos usar el analisis de ellos junto
+con el aprendizaje de maquinas para
+generar mejores estimaciones del score de los clientes, evaluando si cierto cliente
+con ciertos datos asociados compro o no un departamento.
+
+Por ejemplo, un cliente con un set de datos X compro un departamente y otro no. Asi juntamos
+un set de datos para generar un algoritmo, y asignamos otro set de datos como entrenamiento.
+A medida que los datos crecen comparamos la eficiencia de los algoritmos. Si la teoria funciona
+deberiamos eventualmente encontrar pesos que funcionan mejor que el algoritmo propuesto.
