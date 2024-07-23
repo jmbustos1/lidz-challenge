@@ -58,7 +58,7 @@ cada cuotael cual se muestra a continuacion:
 $$\text{Pago Mensual} = \frac{\text{Monto del Préstamo} \times \text{Tasa de Interés Mensual}}{1 - (1 + \text{Tasa de Interés Mensual})^{-\text{Número de Pagos}}}$$
 
 Luego la capacidad de pago se da calculando un factor
-$$$\text{Cuota} = \frac{\text{Salario}}{Pago Mensual} $$
+$$\text{Cuota} = \frac{\text{Salario}}{Pago Mensual} $$
 
 Finalmente se ajusta linealmente el factor tal que si alguien tiene salario 8
 veces mayor a la cuota entonces se le asigna 100 y si es igual entonces es 0
